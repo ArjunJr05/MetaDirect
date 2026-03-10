@@ -2,7 +2,6 @@
     "source": {
         "include": [
             "main.js",
-            "preload.js",
             "README.md"
         ],
         "includePattern": ".+\\.js(doc|x)?$",
