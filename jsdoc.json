@@ -2,18 +2,30 @@
     "source": {
         "include": [
             "main.js",
-            "preload.js"
+            "preload.js",
+            "README.md"
         ],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
-    "plugins": [],
-    "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false
-    },
     "opts": {
+        "template": "node_modules/docdash",
         "destination": "./docs/",
-        "recurse": true
+        "recurse": true,
+        "readme": "README.md"
+    },
+    "docdash": {
+        "static": true,
+        "sort": true,
+        "sectionOrder": [
+            "Classes",
+            "Modules",
+            "Externals",
+            "Events",
+            "Namespaces",
+            "Mixins",
+            "Tutorials",
+            "Interfaces"
+        ]
     }
 }
