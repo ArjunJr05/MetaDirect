@@ -1,0 +1,21 @@
+{
+  "name": "metadirect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "docs": "jsdoc -c jsdoc.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^40.8.0",
+    "jsdoc": "^4.0.5"
+  },
+  "dependencies": {
+    "node-html-parser": "^7.1.0"
+  }
+}

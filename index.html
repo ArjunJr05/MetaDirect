@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electron Premium App</title>
+    <!-- Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0F111A;
+            --accent-color: #61DAFB;
+            --text-color: #E6EDF3;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --gradient: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--gradient);
+            background-attachment: fixed;
+            color: var(--text-color);
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 4rem;
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1.2s ease-out;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            font-weight: 700;
+            background: linear-gradient(90deg, #61DAFB, #A061FB);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(90deg, #61DAFB, #51B5E0);
+            color: #0F111A;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+            text-decoration: none;
+        }
+
+        .status:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(97, 218, 251, 0.4);
+        }
+
+        .micro-interaction {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.5;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* More circles for the background animation */
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        /* Chat and Preview Styles */
+        .chat-input-wrapper {
+            margin: 2rem 0;
+            width: 100%;
+        }
+
+        #url-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        #url-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(97, 218, 251, 0.2);
+        }
+
+        #preview-container {
+            min-height: 100px;
+            margin-top: 1rem;
+        }
+
+        .preview-card-hidden {
+            display: none;
+        }
+
+        .preview-card {
+            display: flex;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-top: 1.5rem;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.5s ease-out;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .preview-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .preview-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .preview-details {
+            padding: 1rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .preview-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .preview-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .preview-domain {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <div class="container">
+        <h1>MetaDirect</h1>
+        <p>Private, End-to-End Link Previews Generated Locally</p>
+
+        <div class="chat-input-wrapper">
+            <input type="text" id="url-input" placeholder="Enter or paste a URL (e.g., https://github.com)..."
+                autocomplete="off">
+        </div>
+
+        <div id="preview-container" class="preview-card-hidden">
+            <!-- Preview card will be injected here -->
+        </div>
+
+        <div class="micro-interaction">Link Preview Feature | Client-Side Generation</div>
+    </div>
+
+    <script>
+        const input = document.getElementById('url-input');
+        const container = document.getElementById('preview-container');
+
+        let debounceTimer;
+
+        input.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            const value = e.target.value;
+            const urlMatch = value.match(/https?:\/\/[^\s]+/);
+
+            if (urlMatch) {
+                container.innerHTML = '<p style="opacity:0.5; padding: 1rem;">Fetching preview...</p>';
+                container.className = ''; // Remove hidden class to show loading text
+                debounceTimer = setTimeout(() => {
+                    fetchPreview(urlMatch[0]);
+                }, 600);
+            } else {
+                container.className = 'preview-card-hidden';
+                container.innerHTML = '';
+            }
+        });
+
+        async function fetchPreview(url) {
+            try {
+                const result = await window.electronAPI.fetchLinkPreview(url);
+                if (result.success) {
+                    const { title, description, image, domain, url: finalUrl } = result.data;
+
+                    container.className = 'preview-card';
+                    container.innerHTML = `
+                        ${image ? `<img src="${image}" class="preview-image" onerror="this.style.display='none'">` : ''}
+                        <div class="preview-details">
+                            <div class="preview-title">${title}</div>
+                            <div class="preview-desc">${description}</div>
+                            <div class="preview-domain">${domain}</div>
+                        </div>
+                    `;
+                    container.onclick = () => window.open(finalUrl, '_blank');
+                } else {
+                    container.className = '';
+                    container.innerHTML = `<p style="padding: 1rem; color: #ff6b6b; font-size: 0.9rem;">Could not load preview for this URL.</p>`;
+                }
+            } catch (err) {
+                console.error(err);
+                container.className = '';
+                container.innerHTML = `<p style="padding: 1rem; color: #ff6b6b; font-size: 0.9rem;">Error connecting to main process.</p>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
