@@ -1,6 +1,7 @@
 /**
  * @fileoverview Main process entry point for the Electron application.
  * Handles window creation and IPC communication for link previews.
+ * @module Core
  */
 
 const { app, BrowserWindow, ipcMain, net } = require('electron');
@@ -10,6 +11,7 @@ const { parse } = require('node-html-parser');
 /**
  * Creates the main application window with secure settings.
  * @function createWindow
+ * @memberof module:Core
  * @returns {void}
  */
 function createWindow() {
@@ -39,6 +41,7 @@ const previewCache = new Map();
  * 
  * @async
  * @function handleFetchLinkPreview
+ * @memberof module:Core
  * @param {Electron.IpcMainInvokeEvent} event - The IPC event object.
  * @param {string} url - The target URL to scan.
  * @returns {Promise<Object>} Object containing success status and extracted metadata.
