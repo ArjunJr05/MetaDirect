@@ -6,7 +6,36 @@
   "scripts": {
     "start": "electron .",
     "docs": "jsdoc -c jsdoc.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-builder build",
+    "build:mac": "electron-builder build --mac",
+    "build:win": "electron-builder build --win"
+  },
+  "build": {
+    "appId": "com.arjunjr.metadirect",
+    "productName": "MetaDirect",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    }
   },
   "keywords": [],
   "author": "",
@@ -14,6 +43,7 @@
   "devDependencies": {
     "docdash": "^2.0.2",
     "electron": "^40.8.0",
+    "electron-builder": "^26.8.1",
     "jsdoc": "^4.0.5"
   },
   "dependencies": {
