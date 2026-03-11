@@ -318,7 +318,7 @@
             const urlMatch = value.match(/https?:\/\/[^\s]+/);
 
             if (urlMatch) {
-                container.innerHTML = '<p style="opacity:0.5; padding: 1rem;">Fetching preview...</p>';
+                container.innerHTML = `<p style="opacity:0.5; padding: 1rem;">${urlMatch[0]}</p>`;
                 container.className = ''; // Remove hidden class to show loading text
                 debounceTimer = setTimeout(() => {
                     fetchPreview(urlMatch[0]);
@@ -340,7 +340,7 @@
                         ${image ? `<img src="${image}" class="preview-image" onerror="this.style.display='none'">` : ''}
                         <div class="preview-details">
                             <div class="preview-title">${title}</div>
-                            <div class="preview-desc">${description}</div>
+                            ${description ? `<div class="preview-desc">${description}</div>` : ''}
                             <div class="preview-domain">${domain}</div>
                         </div>
                     `;

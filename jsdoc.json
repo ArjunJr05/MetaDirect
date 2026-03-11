@@ -1,8 +1,7 @@
 {
     "source": {
         "include": [
-            "main.js",
-            "README.md"
+            "main.js"
         ],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
@@ -10,8 +9,7 @@
     "opts": {
         "template": "node_modules/docdash",
         "destination": "./docs/",
-        "recurse": true,
-        "readme": "README.md"
+        "recurse": true
     },
     "docdash": {
         "static": true,

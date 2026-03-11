@@ -14,6 +14,7 @@ const { parse } = require('node-html-parser');
  * @memberof module:Core
  * @returns {void}
  */
+
 function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 1200,
@@ -25,7 +26,6 @@ function createWindow() {
         },
         titleBarStyle: 'hiddenInset',
     });
-
     mainWindow.loadFile('index.html');
 }
 
@@ -59,7 +59,9 @@ ipcMain.handle('fetch-link-preview', async (event, url) => {
                 method: 'GET',
                 url: url,
                 headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                    // Spoofing a known scraper bot (WhatsApp/Facebook) forces sites like X/Twitter 
+                    // to return rich HTML meta-tags instead of an empty JavaScript application shell.
+                    'User-Agent': 'facebookexternalhit/1.1 WhatsApp/2.21.12.21 A',
                     'Accept': 'text/html'
                 }
             });
@@ -118,7 +120,7 @@ ipcMain.handle('fetch-link-preview', async (event, url) => {
 
         const preview = {
             title: getMeta('og:title') || root.querySelector('title')?.innerText || 'No title',
-            description: getMeta('og:description') || getMeta('description') || 'No description available',
+            description: getMeta('og:description') || getMeta('description') || null,
             image: image,
             url: getMeta('og:url') || url,
             domain: targetUrl.hostname
