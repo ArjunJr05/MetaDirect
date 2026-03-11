@@ -45,7 +45,23 @@ const previewCache = new Map();
  * @memberof module:Core
  * @param {Electron.IpcMainInvokeEvent} event - The IPC event object.
  * @param {string} url - The target URL to scan.
- * @returns {Promise<Object>} Object containing success status and extracted metadata.
+ * @returns {Promise<{
+ *   success: boolean,
+ *   data: {
+ *     title: string,
+ *     description: string|null,
+ *     thumbnailurl: string|null,
+ *     width: string|null,
+ *     height: string|null,
+ *     providername: string|null,
+ *     linktype: string|null,
+ *     faviconlink: string|null,
+ *     hasvideo: boolean,
+ *     url: string,
+ *     domain: string
+ *   },
+ *   error?: string
+ * }>} Promise resolving to the extracted metadata object.
  */
 
 ipcMain.handle('fetch-link-preview', async (event, url) => {
@@ -97,6 +113,7 @@ ipcMain.handle('fetch-link-preview', async (event, url) => {
                 // If we aborted manually, we still want to parse what we got
                 if (err.message === 'net::ERR_ABORTED') {
                     resolve(body);
+
                 } else {
                     reject(err);
                 }
@@ -137,7 +154,7 @@ ipcMain.handle('fetch-link-preview', async (event, url) => {
 
         const width = getMeta('og:image:width');
         const height = getMeta('og:image:height');
-        
+
         let providername = getMeta('og:site_name') || getMeta('twitter:site');
         if (providername && providername.length > 100) providername = providername.substring(0, 100);
 
@@ -155,7 +172,7 @@ ipcMain.handle('fetch-link-preview', async (event, url) => {
         if (title && (title.includes('Just a moment...') || title.includes('Attention Required!'))) {
             title = 'Protected Link';
             description = 'This website requires a browser to verify security checks.';
-            thumbnailurl = null; 
+            thumbnailurl = null;
         }
 
         const preview = {
@@ -172,6 +189,11 @@ ipcMain.handle('fetch-link-preview', async (event, url) => {
             url: getMeta('og:url') || url,
             domain: targetUrl.hostname
         };
+
+        // Print to the terminal in nicely formatted JSON
+        console.log('\n--- NEW PREVIEW GENERATED ---');
+        console.log(JSON.stringify(preview, null, 2));
+        console.log('-----------------------------\n');
 
         // Cache the result for future identical requests
         previewCache.set(url, preview);
