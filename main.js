@@ -60,14 +60,11 @@ ipcMain.handle('fetch-link-preview', async (event, url) => {
                 method: 'GET',
                 url: url,
                 headers: {
-                    // Spoofing a known scraper bot (WhatsApp/Facebook) forces sites like X/Twitter 
-                    // to return rich HTML meta-tags instead of an empty JavaScript application shell.
                     'User-Agent': 'facebookexternalhit/1.1 WhatsApp/2.21.12.21 A',
                     'Accept': 'text/html'
                 }
             });
 
-            // 7 second timeout
             const timeout = setTimeout(() => {
                 request.abort();
                 reject(new Error('Request timed out'));
@@ -119,9 +116,19 @@ ipcMain.handle('fetch-link-preview', async (event, url) => {
             image = new URL(image, targetUrl.origin).href;
         }
 
+        let title = getMeta('og:title') || root.querySelector('title')?.innerText || 'No title';
+        let description = getMeta('og:description') || getMeta('description') || null;
+
+        // Clean up Cloudflare / DDOS protection fallbacks
+        if (title.includes('Just a moment...') || title.includes('Attention Required!')) {
+            title = 'Protected Link';
+            description = 'This website requires a browser to verify security checks.';
+            image = null; // Sometimes it picks up the captcha icon
+        }
+
         const preview = {
-            title: getMeta('og:title') || root.querySelector('title')?.innerText || 'No title',
-            description: getMeta('og:description') || getMeta('description') || null,
+            title: title,
+            description: description,
             image: image,
             url: getMeta('og:url') || url,
             domain: targetUrl.hostname
