@@ -36,32 +36,20 @@ const previewCache = new Map();
  * Handler for the 'fetch-link-preview' IPC event.
  * Performs a secure, client-side metadata extraction with the following optimizations:
  * - In-memory caching: Prevents redundant network requests for the same URL.
- * - Partial Fetching: Aborts the request once the HTML <head> or 128KB limit is reached.
+ * - Partial Fetching: Aborts the request once the HTML head or 2MB limit is reached.
  * - Image Normalization: Resolves relative image paths to absolute URLs.
- * - SPA/React Bypass: Spoofs the WhatsApp User-Agent to retrieve rich metadata from difficult strict platforms (like X/Twitter, Instagram).
- * 
+ * - SPA/React Bypass: Spoofs the WhatsApp User-Agent to retrieve rich metadata from strict platforms like X/Twitter and Instagram.
+ * - Advanced Extraction: Returns extended metadata including providername, faviconlink, hasvideo, width, height, and linktype.
+ * - Domain Exclusions: Suppresses description for YouTube links per extraction schema rules.
+ * - Cloudflare Handling: Detects bot-challenge pages and returns a clean 'Protected Link' fallback.
+ *
  * @async
  * @function handleFetchLinkPreview
  * @memberof module:Core
  * @param {Electron.IpcMainInvokeEvent} event - The IPC event object.
- * @param {string} url - The target URL to scan.
- * @returns {Promise<{
- *   success: boolean,
- *   data: {
- *     title: string,
- *     description: string|null,
- *     thumbnailurl: string|null,
- *     width: string|null,
- *     height: string|null,
- *     providername: string|null,
- *     linktype: string|null,
- *     faviconlink: string|null,
- *     hasvideo: boolean,
- *     url: string,
- *     domain: string
- *   },
- *   error?: string
- * }>} Promise resolving to the extracted metadata object.
+ * @param {string} url - The target URL to scan for Open Graph and Twitter card metadata.
+ * @returns {Promise<Object>} Resolves with success status, error message if failed, and a data object containing:
+ *   title, description, thumbnailurl, width, height, providername, linktype, faviconlink, hasvideo, url, domain.
  */
 
 ipcMain.handle('fetch-link-preview', async (event, url) => {
