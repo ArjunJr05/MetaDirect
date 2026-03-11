@@ -10,6 +10,7 @@
   - **Partial Fetching**: Aborts downloads after reaching the `<head>` section or 128KB limit, making results up to 10x faster.
   - **In-Memory Caching**: Instant results for previously visited links.
   - **Image Normalization**: Automatically resolves relative image paths to absolute URLs.
+  - **SPA/React Bypass**: Spoofs the `WhatsApp` User-Agent to force difficult platforms (like X, Instagram, and Facebook) to return rich HTML meta-tags instead of blocking scraping with blank JavaScript shells.
 - **Secure Architecture**: Implements strict `contextIsolation` and `preload` bridges to prevent XSS-to-RCE escalation.
 
 ## 🛠️ Security Architecture

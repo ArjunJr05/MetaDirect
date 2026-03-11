@@ -38,6 +38,7 @@ const previewCache = new Map();
  * - In-memory caching: Prevents redundant network requests for the same URL.
  * - Partial Fetching: Aborts the request once the HTML <head> or 128KB limit is reached.
  * - Image Normalization: Resolves relative image paths to absolute URLs.
+ * - SPA/React Bypass: Spoofs the WhatsApp User-Agent to retrieve rich metadata from difficult strict platforms (like X/Twitter, Instagram).
  * 
  * @async
  * @function handleFetchLinkPreview
