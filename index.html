@@ -267,16 +267,42 @@
             letter-spacing: 0.5px;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
+        /* Raw JSON output block */
+        #json-output {
+            display: none;
+            margin-top: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(97, 218, 251, 0.2);
+            border-radius: 1rem;
+            padding: 1.2rem 1.5rem;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: slideUp 0.4s ease-out;
+        }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        #json-output pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.78rem;
+            color: #a8d8f0;
+            white-space: pre-wrap;
+            word-break: break-all;
+            opacity: 0.9;
+        }
+
+        #json-output .json-label {
+            font-size: 0.72rem;
+            opacity: 0.4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -301,6 +327,12 @@
 
         <div id="preview-container" class="preview-card-hidden">
             <!-- Preview card will be injected here -->
+        </div>
+
+        <!-- Raw JSON Metadata Output -->
+        <div id="json-output">
+            <div class="json-label">Raw Metadata Output</div>
+            <pre id="json-pre"></pre>
         </div>
 
         <div class="micro-interaction">Link Preview Feature | Client-Side Generation</div>
@@ -345,14 +377,23 @@
                         </div>
                     `;
                     container.onclick = () => window.open(finalUrl, '_blank');
+
+                    // Show raw JSON output below the card
+                    const jsonOutput = document.getElementById('json-output');
+                    const jsonPre = document.getElementById('json-pre');
+                    jsonPre.textContent = JSON.stringify(result.data, null, 2);
+                    jsonOutput.style.display = 'block';
+
                 } else {
                     container.className = '';
                     container.innerHTML = `<p style="padding: 1rem; color: #ff6b6b; font-size: 0.9rem;">Could not load preview for this URL.</p>`;
+                    document.getElementById('json-output').style.display = 'none';
                 }
             } catch (err) {
                 console.error(err);
                 container.className = '';
                 container.innerHTML = `<p style="padding: 1rem; color: #ff6b6b; font-size: 0.9rem;">Error connecting to main process.</p>`;
+                document.getElementById('json-output').style.display = 'none';
             }
         }
     </script>
